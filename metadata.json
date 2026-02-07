@@ -1,0 +1,7 @@
+{
+  "name": "Copy of nova versão mesa de rpg com narrador ",
+  "description": "Uma plataforma imersiva para gestão de personagens de RPG com estética de fantasia medieval, incluindo ficha completa, rolador de dados e exportação de dados.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

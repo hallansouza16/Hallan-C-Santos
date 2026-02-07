@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronistas do Reino</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=MedievalSharp&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #c5a059;
+            --gold-bright: #e5c158;
+            --dark-brown: #1a0f0a;
+            --crimson: #7a1212;
+            --parchment: #f4e4bc;
+        }
+
+        body {
+            background-color: #0f0907;
+            font-family: 'Cinzel', serif;
+            color: #e2d1b3;
+            overflow-x: hidden;
+            cursor: url('https://cur.cursors-4u.net/games/gam-4/gam373.cur'), auto;
+        }
+
+        .medieval-font { font-family: 'MedievalSharp', cursive; }
+        .uncial-font { font-family: 'Uncial Antiqua', cursive; }
+
+        .ink-text {
+            color: var(--dark-brown) !important;
+            font-weight: 600;
+        }
+
+        input, textarea, select {
+            color: var(--dark-brown) !important;
+            background-color: rgba(255, 255, 255, 0.4) !important;
+            border: 2px solid rgba(26, 15, 10, 0.2) !important;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            background-color: rgba(255, 255, 255, 0.6) !important;
+            border-color: var(--gold) !important;
+            box-shadow: 0 0 10px rgba(197, 160, 89, 0.3) !important;
+            outline: none;
+        }
+
+        .parchment-bg {
+            background-color: var(--parchment);
+            background-image: 
+                url("https://www.transparenttextures.com/patterns/paper-fibers.png"),
+                radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.05) 100%);
+            box-shadow: 
+                inset 0 0 50px rgba(0,0,0,0.15),
+                0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .btn-medieval {
+            background: linear-gradient(135deg, #42281a 0%, #1a0f0a 100%);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            text-shadow: 1px 1px 2px black;
+            box-shadow: 0 4px 0 #000;
+            transition: all 0.2s ease;
+        }
+
+        .btn-medieval:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #000;
+            color: var(--gold-bright);
+        }
+
+        .vignette {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.9) 100%);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .custom-scroll::-webkit-scrollbar { height: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 10px;
+        }
+
+        @keyframes cardDrop {
+            0% { opacity: 0; transform: translateY(-50px) rotate(-5deg) scale(0.9); }
+            100% { opacity: 1; transform: translateY(0) rotate(0) scale(1); }
+        }
+        .animate-fade-in { animation: cardDrop 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "@google/genai": "https://esm.sh/@google/genai@^1.40.0"
+  }
+}
+</script>
+</head>
+<body>
+    <div class="vignette"></div>
+    <div id="root"></div>
+</body>
+</html>
