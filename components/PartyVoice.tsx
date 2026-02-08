@@ -235,8 +235,10 @@ const PartyVoice: React.FC<PartyVoiceProps> = ({ currentUser, tableId }) => {
 
   const stopVoice = () => {
     localStreamRef.current?.getTracks().forEach(t => t.stop());
-    Object.values(pcsRef.current).forEach(p => p.pc.close());
-    Object.values(audioElementsRef.current).forEach(a => { a.pause(); a.remove(); });
+    // Fix: Explicitly cast to PeerConnection[] to avoid "unknown" type error
+    (Object.values(pcsRef.current) as PeerConnection[]).forEach(p => p.pc.close());
+    // Fix: Explicitly cast to HTMLAudioElement[] to avoid "unknown" type error
+    (Object.values(audioElementsRef.current) as HTMLAudioElement[]).forEach(a => { a.pause(); a.remove(); });
     pcsRef.current = {};
     audioElementsRef.current = {};
     analysersRef.current = {};

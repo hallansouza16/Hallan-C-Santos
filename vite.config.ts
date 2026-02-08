@@ -1,23 +1,19 @@
-import path from 'path';
-import { defineConfig, loadEnv } from 'vite';
-import react from '@vitejs/plugin-react';
 
+import { defineConfig, loadEnv } from 'vite';
+import process from 'node:process';
+
+// Configuration for Vite
 export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, '.', '');
-    return {
-      server: {
-        port: 3000,
-        host: '0.0.0.0',
-      },
-      plugins: [react()],
-      define: {
-        'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
-      },
-      resolve: {
-        alias: {
-          '@': path.resolve(__dirname, '.'),
-        }
-      }
-    };
+  // Carrega as variáveis de ambiente (incluindo as do arquivo .env)
+  // O prefixo vazio '' permite ler variáveis como PORT sem o prefixo VITE_
+  // Fixed: Added explicit import for 'process' to resolve TypeScript errors with 'process.cwd()'
+  const env = loadEnv(mode, process.cwd(), '');
+  
+  return {
+    server: {
+      port: Number(env.PORT) || 4000,
+      host: true,
+      strictPort: true,
+    },
+  };
 });
