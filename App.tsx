@@ -166,7 +166,7 @@ const App: React.FC = () => {
                   <span className="text-[10px] medieval-font uppercase text-[#c5a059] bg-[#2d1b0d] px-3 py-1 rounded border border-[#c5a059]/30">
                     {currentUser}
                   </span>
-                  {currentTable && <span className="text-[7px] font-bold text-white/40 mt-1 uppercase tracking-tighter">{userRole} da Mesa</span>}
+                  {/* Removido papel do usuário (GM/Player) conforme solicitado */}
                 </div>
               )}
               {currentTable && userRole === 'GM' && (

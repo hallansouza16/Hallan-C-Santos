@@ -75,10 +75,10 @@ const ActivityLog: React.FC<ActivityLogProps> = ({ currentUser, tableId }) => {
               <div className={`max-w-[85%] p-2 rounded border ${log.username === currentUser ? 'bg-[#c5a059]/10 border-[#c5a059]/30 ml-auto' : 'bg-black/20 border-[#2d1b0d] mr-auto'}`}>
                 <div className="flex justify-between items-center gap-4 mb-1 border-b border-white/5 pb-1">
                   <span className="text-[7px] font-bold text-[#c5a059] uppercase">{log.username}</span>
-                  <span className="text-[6px] opacity-20 italic">{new Date(log.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                  <span className="text-[6px] opacity-20 italic text-[#c5a059]/60">{new Date(log.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
                 </div>
-                <p className="text-[10px] medieval-font text-[#e2d1b3] leading-relaxed break-words">
-                  {log.type === 'DICE' && <span className="mr-1">🎲</span>}
+                <p className="text-[10px] medieval-font text-[#a38141] leading-relaxed break-words font-medium">
+                  {log.type === 'DICE' && <span className="mr-1 brightness-125">🎲</span>}
                   {log.content}
                 </p>
               </div>

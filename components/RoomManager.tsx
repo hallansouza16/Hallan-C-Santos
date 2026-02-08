@@ -32,7 +32,7 @@ const RoomManager: React.FC<RoomManagerProps> = ({ currentUser, onJoin }) => {
       return;
     }
 
-    // Gera um ID de 6 caracteres garantidos
+    // Gera um ID de 6 caracteres garantidos em maiúsculas
     const generateId = () => {
       const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
       let result = '';
@@ -69,15 +69,15 @@ const RoomManager: React.FC<RoomManagerProps> = ({ currentUser, onJoin }) => {
       return;
     }
 
-    // Busca definitiva no LocalStorage
+    // Busca definitiva no LocalStorage com comparação insensível a maiúsculas
     const rawTables = localStorage.getItem('rpg_tables');
     const currentTables: TableRoom[] = rawTables ? JSON.parse(rawTables) : [];
-    const table = currentTables.find(t => t.id === idToSearch);
+    const table = currentTables.find(t => t.id.toUpperCase() === idToSearch);
     
     if (table) {
       onJoin(table);
     } else {
-      alert(`A mesa [${idToSearch}] não foi encontrada neste navegador.\n\nLembre-se: Para jogar com amigos em computadores diferentes, o Mestre deve enviar o arquivo ".json" (Exportar Pergaminho) para você importar primeiro.`);
+      alert(`A mesa [${idToSearch}] não foi encontrada nos registros do Reino.\n\nVerifique o código ou importe o pergaminho (.json) se esta mesa foi criada em outro dispositivo.`);
     }
   };
 
