@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI, LiveServerMessage, Modality } from '@google/genai';
 
@@ -19,7 +18,9 @@ const VoiceOracle: React.FC<VoiceOracleProps> = ({ currentUser, tableId }) => {
   const nextStartTimeRef = useRef<number>(0);
   const sourcesRef = useRef<Set<AudioBufferSourceNode>>(new Set());
 
-  // Atualiza o ganho quando o estado de mudo muda
+  // Verifica se a API KEY está disponível
+  const isApiKeyAvailable = process.env.API_KEY && process.env.API_KEY !== 'insira_sua_chave_aqui' && process.env.API_KEY.trim() !== '';
+
   useEffect(() => {
     if (gainNodeRef.current) {
       gainNodeRef.current.gain.setValueAtTime(isMuted ? 0 : 1, audioContextRef.current?.currentTime || 0);
@@ -78,6 +79,11 @@ const VoiceOracle: React.FC<VoiceOracleProps> = ({ currentUser, tableId }) => {
   };
 
   const startOracle = async () => {
+    if (!isApiKeyAvailable) {
+      setError("A magia de voz requer uma Chave de API configurada no .env.");
+      return;
+    }
+
     try {
       setError(null);
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -86,7 +92,6 @@ const VoiceOracle: React.FC<VoiceOracleProps> = ({ currentUser, tableId }) => {
       const outputCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
       audioContextRef.current = outputCtx;
       
-      // Criar gain node para controle de mudo
       const gainNode = outputCtx.createGain();
       gainNode.gain.setValueAtTime(isMuted ? 0 : 1, outputCtx.currentTime);
       gainNode.connect(outputCtx.destination);
@@ -126,7 +131,6 @@ const VoiceOracle: React.FC<VoiceOracleProps> = ({ currentUser, tableId }) => {
               const buffer = await decodeAudioData(decode(audioData), ctx, 24000, 1);
               const source = ctx.createBufferSource();
               source.buffer = buffer;
-              // Conectar ao gain node em vez do destino direto
               source.connect(gainNodeRef.current!);
               source.onended = () => {
                 sourcesRef.current.delete(source);
@@ -191,9 +195,9 @@ const VoiceOracle: React.FC<VoiceOracleProps> = ({ currentUser, tableId }) => {
         {!isActive ? (
           <button 
             onClick={startOracle}
-            className="w-16 h-16 rounded-full bg-[#1a0f0a] border-4 border-[#c5a059] flex items-center justify-center text-[#c5a059] hover:scale-105 transition-transform shadow-lg group relative"
+            className={`w-16 h-16 rounded-full bg-[#1a0f0a] border-4 border-[#c5a059] flex items-center justify-center text-[#c5a059] transition-transform shadow-lg group relative ${!isApiKeyAvailable ? 'opacity-50 grayscale cursor-not-allowed' : 'hover:scale-105'}`}
           >
-            <div className="group-hover:animate-ping absolute inset-0 bg-[#c5a059]/20 rounded-full"></div>
+            {isApiKeyAvailable && <div className="group-hover:animate-ping absolute inset-0 bg-[#c5a059]/20 rounded-full"></div>}
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
           </button>
         ) : (
@@ -211,12 +215,12 @@ const VoiceOracle: React.FC<VoiceOracleProps> = ({ currentUser, tableId }) => {
         )}
 
         <p className="text-[8px] medieval-font uppercase text-center text-[#2d1b0d]/60 leading-tight">
-          {!isActive 
-            ? "Fale com o Narrador" 
-            : (isModelSpeaking ? (isMuted ? "O Oráculo fala em silêncio..." : "O Oráculo profetiza...") : "O Destino escuta sua voz...")}
+          {!isApiKeyAvailable 
+            ? "Narrador Offline (Sem API Key)" 
+            : (!isActive ? "Fale com o Narrador" : (isModelSpeaking ? (isMuted ? "O Oráculo fala em silêncio..." : "O Oráculo profetiza...") : "O Destino escuta sua voz..."))}
         </p>
 
-        {error && <p className="text-[7px] text-red-600 font-bold uppercase animate-bounce">{error}</p>}
+        {error && <p className="text-[7px] text-red-600 font-bold uppercase text-center px-2">{error}</p>}
       </div>
     </div>
   );

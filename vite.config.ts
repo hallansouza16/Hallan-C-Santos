@@ -1,26 +1,35 @@
-
 import { defineConfig, loadEnv } from 'vite';
 import process from 'node:process';
 
-// Configuração para o servidor Vite do Cronistas do Reino
 export default defineConfig(({ mode }) => {
-  // Carrega as variáveis de ambiente (incluindo as do arquivo .env)
   const env = loadEnv(mode, process.cwd(), '');
-  const port = Number(env.PORT) || 4000;
-  const host = 'localhost';
+  
+  // Prioridade: Variável do Sistema > Arquivo .env > Padrão
+  const port = Number(process.env.PORT || env.PORT) || 4000;
+  const host = process.env.HOST || env.HOST || '0.0.0.0';
 
-  // Log de inicialização customizado para o desenvolvedor
   console.log('\n---------------------------------------------------');
-  console.log('⚔️  CRONISTAS DO REINO - INICIALIZANDO PORTAL ⚔️');
-  console.log(`📡 Porta configurada: ${port}`);
-  console.log(`🌐 Domínio local: http://${host}:${port}`);
+  console.log('⚔️  CRONISTAS DO REINO - PORTAL DE RPG ⚔️');
+  console.log(`📡 Porta: ${port}`);
+  console.log(`🌐 Host: ${host}`);
   console.log('---------------------------------------------------\n');
   
   return {
+    define: {
+      // Injeta a chave apenas se ela existir e não for o placeholder
+      'process.env.API_KEY': JSON.stringify(env.API_KEY || '')
+    },
     server: {
       port: port,
-      host: true,
+      host: host,
       strictPort: true,
+      allowedHosts: true
     },
+    preview: {
+      port: port,
+      host: host,
+      strictPort: true,
+      allowedHosts: true
+    }
   };
 });
